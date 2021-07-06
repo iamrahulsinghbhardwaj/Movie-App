@@ -8,6 +8,7 @@ import movies from './reducers';
 
 const store =createStore(movies);
 
+console.log('STATE',store.getState());
 console.log('store',store);
 //console.log('BEFORE STATE',store.getState()); //before we send the connection  
 
