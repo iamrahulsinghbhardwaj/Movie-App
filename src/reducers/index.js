@@ -1,12 +1,23 @@
-import {ADD_MOVIES,ADD_FAVOURITE,SET_SHOW_FAVOURITIES,REMOVE_FROM_FAVOURITIES} from '../actions';
+import {combineReducers} from 'redux';
+
+import {
+    ADD_MOVIES,
+    ADD_FAVOURITE,
+    SET_SHOW_FAVOURITIES,
+    REMOVE_FROM_FAVOURITIES,
+    ADD_MOVIE_TO_LIST,
+    ADD_SEARCH_RESULT
+} from '../actions';
 
 //if there is no state then it will initilize list and favourities with []
 const initialMoviesState={
     list:[],
-    favourites:[]
+    favourites:[],
+    showFavourites:false
 }
 
-export default function movies(state=initialMoviesState,action){
+export  function movies(state=initialMoviesState,action){
+    console.log('Movies Reducers');
     // if(action.type===ADD_MOVIES){
     //     return {
     //         ...state,
@@ -42,11 +53,61 @@ export default function movies(state=initialMoviesState,action){
          return{
              ...state,
              showFavourites:action.val
-         }
+         };
+
+         case ADD_MOVIE_TO_LIST:
+         return{
+             ...state,
+             list:[action.movie,...state.list]
+         };
+         default:
+         return state;
 
 
-        default:
-        return state;
     }
 }
 
+const initialSeachState={
+    result:{},
+    showSearchResults:false,
+};
+
+export function search (state=initialSeachState,action){
+    
+    switch(action.type){
+
+        case ADD_SEARCH_RESULT:
+        return{
+            ...state,
+            result:action.movie,
+            showSearchResults:true
+        } 
+
+        case ADD_MOVIE_TO_LIST:
+            return{
+                ...state,
+              showSearchResults:false
+            };
+
+        default:
+          return state;
+    }
+}
+
+// const initialRootstate={
+//     movies: initialMoviesState,
+//     search: initialSeachState
+// }
+
+
+// export default function rootReducer(state=initialRootstate,action){
+//     return{
+//         movies:movies(state.movies,action),
+//         search:search(state.search,action)
+//     }
+// }
+
+export default combineReducers({
+    movies,
+    search
+})
